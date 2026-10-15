@@ -6,7 +6,7 @@ Authors: Kim Morrison
 
 module
 
-public import HexSparsePolyMathlib.Equiv
+public import HexSparsePolyTheory.Equiv
 
 public section
 

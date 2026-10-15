@@ -11,7 +11,7 @@ public import Mathlib.Algebra.Polynomial.Coeff
 public import Mathlib.Algebra.Polynomial.Derivative
 public import Mathlib.Algebra.Polynomial.Eval.Defs
 public import Mathlib.Algebra.Polynomial.Monomial
-public import HexPolyMathlib
+public import HexPolyTheory
 public import HexSparsePoly
 
 public section
@@ -23,11 +23,11 @@ Equivalence between the executable canonical sparse representation
 `denseEquiv` packages the core library's `toDense`/`ofDense`
 conversions, round trips, and homomorphism laws as a ring equivalence
 with `Hex.DensePoly`; `equiv` composes it with
-`HexPolyMathlib.equiv`. The correspondence lemmas transport one public
+`HexPolyTheory.equiv`. The correspondence lemmas transport one public
 core operation each.
 -/
 
-namespace HexSparsePolyMathlib
+namespace HexSparsePolyTheory
 
 universe u
 
@@ -65,7 +65,7 @@ polynomials. -/
 @[expose]
 def equiv [CommRing R] [DecidableEq R] :
     Hex.SparsePoly R ≃+* Polynomial R :=
-  denseEquiv.trans HexPolyMathlib.equiv
+  denseEquiv.trans HexPolyTheory.equiv
 
 /-- The ring isomorphism {name}`equiv` is computed by converting to the
 dense representation and reading it as a Mathlib polynomial. Not `simp`:
@@ -73,25 +73,25 @@ the correspondence lemmas below are keyed on `equiv s` directly, and
 unfolding first would preempt them. -/
 @[grind =]
 theorem equiv_apply [CommRing R] [DecidableEq R] (s : Hex.SparsePoly R) :
-    equiv s = HexPolyMathlib.toPolynomial s.toDense := rfl
+    equiv s = HexPolyTheory.toPolynomial s.toDense := rfl
 
 /-- The inverse of {name}`equiv` rebuilds the dense representation and
 converts it to canonical sparse form. -/
 @[grind =]
 theorem equiv_symm_apply [CommRing R] [DecidableEq R] (p : Polynomial R) :
-    equiv.symm p = Hex.SparsePoly.ofDense (HexPolyMathlib.ofPolynomial p) :=
+    equiv.symm p = Hex.SparsePoly.ofDense (HexPolyTheory.ofPolynomial p) :=
   rfl
 
 /-- The two equivalences agree across the dense conversion. -/
 theorem equiv_toDense [CommRing R] [DecidableEq R] (s : Hex.SparsePoly R) :
-    HexPolyMathlib.equiv s.toDense = equiv s := rfl
+    HexPolyTheory.equiv s.toDense = equiv s := rfl
 
 /-- {name}`equiv` preserves coefficients; the identification is exact,
 coefficient by coefficient. -/
 @[simp, grind =]
 theorem coeff_equiv [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) (e : Nat) : (equiv s).coeff e = s.coeff e := by
-  rw [equiv_apply, HexPolyMathlib.coeff_toPolynomial,
+  rw [equiv_apply, HexPolyTheory.coeff_toPolynomial,
     Hex.SparsePoly.coeff_toDense]
 
 /-- The stored exponents of the canonical representation are exactly
@@ -108,7 +108,7 @@ executable gap-Horner evaluation. -/
 @[simp, grind =]
 theorem equiv_eval [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) (x : R) : (equiv s).eval x = s.eval x := by
-  rw [equiv_apply, HexPolyMathlib.eval_toPolynomial]
+  rw [equiv_apply, HexPolyTheory.eval_toPolynomial]
   exact (Hex.SparsePoly.eval_toDense s x).symm
 
 /-- Differentiation corresponds: Mathlib's derivative of the image is
@@ -116,7 +116,7 @@ the image of the executable derivative. -/
 theorem equiv_derivative [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) :
     Polynomial.derivative (equiv s) = equiv s.derivative := by
-  rw [equiv_apply, equiv_apply, ← HexPolyMathlib.toPolynomial_derivative,
+  rw [equiv_apply, equiv_apply, ← HexPolyTheory.toPolynomial_derivative,
     Hex.SparsePoly.derivative_toDense]
 
 /-- Composition corresponds: Mathlib's `comp` of the images is the
@@ -125,15 +125,15 @@ theorem equiv_compose [CommRing R] [DecidableEq R]
     (s t : Hex.SparsePoly R) :
     (equiv s).comp (equiv t) = equiv (s.compose t) := by
   rw [equiv_apply, equiv_apply, equiv_apply,
-    Hex.SparsePoly.compose_toDense, HexPolyMathlib.toPolynomial_compose]
+    Hex.SparsePoly.compose_toDense, HexPolyTheory.toPolynomial_compose]
 
 /-- Exponent substitution corresponds to composition with `X ^ k`. -/
 theorem equiv_substPow [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) (k : Nat) :
     (equiv s).comp (Polynomial.X ^ k) = equiv (s.substPow k) := by
   rw [equiv_apply, equiv_apply, Hex.SparsePoly.substPow_toDense,
-    HexPolyMathlib.toPolynomial_compose,
-    HexPolyMathlib.toPolynomial_monomial, Polynomial.X_pow_eq_monomial]
+    HexPolyTheory.toPolynomial_compose,
+    HexPolyTheory.toPolynomial_monomial, Polynomial.X_pow_eq_monomial]
 
 /-- Argument scaling corresponds to composition with `C a * X`. -/
 theorem equiv_substScale [CommRing R] [DecidableEq R]
@@ -141,21 +141,21 @@ theorem equiv_substScale [CommRing R] [DecidableEq R]
     (equiv s).comp (Polynomial.C a * Polynomial.X) =
       equiv (s.substScale a) := by
   rw [equiv_apply, equiv_apply, Hex.SparsePoly.substScale_toDense,
-    HexPolyMathlib.toPolynomial_compose,
-    HexPolyMathlib.toPolynomial_monomial, Polynomial.C_mul_X_eq_monomial]
+    HexPolyTheory.toPolynomial_compose,
+    HexPolyTheory.toPolynomial_monomial, Polynomial.C_mul_X_eq_monomial]
 
 /-- Monomials correspond. -/
 @[simp, grind =]
 theorem equiv_monomial [CommRing R] [DecidableEq R] (e : Nat) (c : R) :
     equiv (Hex.SparsePoly.monomial e c) = Polynomial.monomial e c := by
   rw [equiv_apply, Hex.SparsePoly.toDense_monomial,
-    HexPolyMathlib.toPolynomial_monomial]
+    HexPolyTheory.toPolynomial_monomial]
 
 /-- Constants correspond. -/
 @[simp, grind =]
 theorem equiv_C [CommRing R] [DecidableEq R] (c : R) :
     equiv (Hex.SparsePoly.C c) = Polynomial.C c := by
-  rw [equiv_apply, Hex.SparsePoly.toDense_C, HexPolyMathlib.toPolynomial_C]
+  rw [equiv_apply, Hex.SparsePoly.toDense_C, HexPolyTheory.toPolynomial_C]
 
 /-- The variable corresponds. -/
 @[simp, grind =]
@@ -171,7 +171,7 @@ the zero polynomial mapping to `0`. -/
 theorem equiv_natDegree [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) :
     (equiv s).natDegree = s.natDegree := by
-  rw [equiv_apply, HexPolyMathlib.natDegree_toPolynomial]
+  rw [equiv_apply, HexPolyTheory.natDegree_toPolynomial]
   unfold Hex.DensePoly.natDegree Hex.SparsePoly.natDegree
   rw [Hex.SparsePoly.degree?_toDense]
 
@@ -180,7 +180,7 @@ theorem equiv_natDegree [CommRing R] [DecidableEq R]
 theorem equiv_leadingCoeff [CommRing R] [DecidableEq R]
     (s : Hex.SparsePoly R) :
     (equiv s).leadingCoeff = s.leadingCoeff := by
-  rw [equiv_apply, HexPolyMathlib.leadingCoeff_toPolynomial,
+  rw [equiv_apply, HexPolyTheory.leadingCoeff_toPolynomial,
     Hex.SparsePoly.leadingCoeff_toDense]
 
 /-- Monicity corresponds. -/
@@ -191,4 +191,4 @@ theorem equiv_monic [CommRing R] [DecidableEq R] (s : Hex.SparsePoly R) :
 
 end
 
-end HexSparsePolyMathlib
+end HexSparsePolyTheory

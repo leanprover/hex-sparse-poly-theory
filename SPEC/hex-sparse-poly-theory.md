@@ -1,4 +1,4 @@
-# hex-sparse-poly-mathlib (depends on hex-sparse-poly + hex-poly-mathlib + Mathlib)
+# hex-sparse-poly-theory (depends on hex-sparse-poly + hex-poly-theory + Mathlib)
 
 The Mathlib correspondence layer for the canonical, Mathlib-free sparse
 univariate polynomials in
@@ -14,7 +14,7 @@ The layer owns correspondence only:
   `Hex.DensePoly R`, packaging the core library's `toDense`/`ofDense`
   conversions, round trips, and homomorphism laws;
 - `equiv`, the ring equivalence with `Polynomial R`, defined as
-  `denseEquiv.trans HexPolyMathlib.equiv`;
+  `denseEquiv.trans HexPolyTheory.equiv`;
 - one correspondence lemma per public core operation: `coeff_equiv`,
   `equiv_toDense`, `equiv_support`, `equiv_eval`, `equiv_derivative`,
   `equiv_compose`, `equiv_substPow`, `equiv_substScale`,
@@ -27,7 +27,7 @@ The layer owns correspondence only:
 Following the project split, no theorem about `SparsePoly` itself
 belongs here: representation facts (including `mem_support_iff`, which
 `equiv_support` consumes) live in `hex-sparse-poly`, and dense-side
-facts live in `hex-poly` / `hex-poly-mathlib`.
+facts live in `hex-poly` / `hex-poly-theory`.
 
 ## Principal equivalence
 
@@ -36,7 +36,7 @@ def denseEquiv [CommRing R] [DecidableEq R] :
     Hex.SparsePoly R ≃+* Hex.DensePoly R
 def equiv [CommRing R] [DecidableEq R] :
     Hex.SparsePoly R ≃+* Polynomial R :=
-  denseEquiv.trans HexPolyMathlib.equiv
+  denseEquiv.trans HexPolyTheory.equiv
 ```
 
 Both are stated at Mathlib's `[CommRing R]`. The parent SPEC records

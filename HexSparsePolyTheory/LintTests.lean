@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Kim Morrison
 -/
 
-import HexSparsePolyMathlib
+import HexSparsePolyTheory
 import Batteries.Tactic.Lint
 import Mathlib.Tactic.Linter.Lint
 import Mathlib.Tactic.Linter.Style
@@ -43,4 +43,4 @@ module. -/
 
 #lint- docBlame docBlameThm' in HexSparsePoly
 
-#lint- docBlame docBlameThm' in HexSparsePolyMathlib
+#lint- docBlame docBlameThm' in HexSparsePolyTheory

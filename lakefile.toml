@@ -1,5 +1,5 @@
-name = "hex-sparse-poly-mathlib"
-defaultTargets = ["HexSparsePolyMathlib"]
+name = "hex-sparse-poly-theory"
+defaultTargets = ["HexSparsePolyTheory"]
 
 leanOptions = [
   { name = "doc.verso", value = true },
@@ -9,17 +9,17 @@ leanOptions = [
 [[require]]
 name = "HexPoly"
 git = "https://github.com/leanprover/hex-poly.git"
-rev = "v0.9.0"
+rev = "v0.10.0"
 
 [[require]]
-name = "HexPolyMathlib"
-git = "https://github.com/leanprover/hex-poly-mathlib.git"
-rev = "v0.9.0"
+name = "HexPolyTheory"
+git = "https://github.com/leanprover/hex-poly-theory.git"
+rev = "v0.10.0"
 
 [[require]]
 name = "HexSparsePoly"
 git = "https://github.com/leanprover/hex-sparse-poly.git"
-rev = "v0.9.0"
+rev = "v0.10.0"
 
 [[require]]
 name = "mathlib"
@@ -27,4 +27,4 @@ git = "https://github.com/leanprover-community/mathlib4.git"
 rev = "6b7abb3c7686292736be2955bd3eb9ebf63b456a"
 
 [[lean_lib]]
-name = "HexSparsePolyMathlib"
+name = "HexSparsePolyTheory"

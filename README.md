@@ -1,16 +1,16 @@
-# hex-sparse-poly-mathlib
+# hex-sparse-poly-theory
 
 Part of [`hex`](https://github.com/kim-em/hex-dev), a computer algebra
 library for Lean 4. The aim is fast executable code, fully verified, built
 with spec-driven development.
 
-`hex-sparse-poly-mathlib` is the Mathlib correspondence layer for
+`hex-sparse-poly-theory` is the Mathlib correspondence layer for
 [`hex-sparse-poly`](https://github.com/leanprover/hex-sparse-poly). It
 identifies the executable canonical sparse representation with Mathlib's
 `Polynomial R` and transports one correspondence lemma per public
 operation. It depends on Mathlib,
 [`hex-sparse-poly`](https://github.com/leanprover/hex-sparse-poly), and
-[`hex-poly-mathlib`](https://github.com/leanprover/hex-poly-mathlib).
+[`hex-poly-theory`](https://github.com/leanprover/hex-poly-theory).
 
 # Quickstart
 
@@ -18,15 +18,15 @@ Add to your `lakefile.toml`:
 
 ```toml
 [[require]]
-name = "hex-sparse-poly-mathlib"
-git = "https://github.com/leanprover/hex-sparse-poly-mathlib.git"
+name = "hex-sparse-poly-theory"
+git = "https://github.com/leanprover/hex-sparse-poly-theory.git"
 rev = "main"
 ```
 
 ```lean
-import HexSparsePolyMathlib
+import HexSparsePolyTheory
 
-open Hex HexSparsePolyMathlib
+open Hex HexSparsePolyTheory
 
 #check (equiv : SparsePoly Int ≃+* Polynomial Int)
 
@@ -65,7 +65,7 @@ The executable operations, their kernel-facing specifications, and the
 Mathlib-free algebra live in
 [`hex-sparse-poly`](https://github.com/leanprover/hex-sparse-poly); the
 dense-side equivalence this layer composes with lives in
-[`hex-poly-mathlib`](https://github.com/leanprover/hex-poly-mathlib).
+[`hex-poly-theory`](https://github.com/leanprover/hex-poly-theory).
 
 # Contributing
 
